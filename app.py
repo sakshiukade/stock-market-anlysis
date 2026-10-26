@@ -22,9 +22,9 @@ if not api_key:
     st.stop()
 
 llm = ChatGroq(
-    model="qwen/qwen3.8-27b",
-    api_key=api_key,
-    temperature=0
+    model="qwen/qwen3-8b",
+    temperature=0,
+    max_tokens=700
 )
 
 image = st.file_uploader(
@@ -50,23 +50,19 @@ if image and st.button("Analyze Chart"):
 
     mime = image.type or "image/png"
 
-    prompt = f"""
-    Analyze the uploaded stock chart in plain language.
+    prompt = """
+    Analyze this stock chart briefly.
 
-    User question: {question}
+    Include:
+    1. Overall trend
+    2. Support and resistance
+    3. Moving averages
+    4. RSI or MACD, if visible
+    5. Bullish or bearish signals
+    6. Risks and uncertainty
 
-    Explain:
-    1. Overall price trend
-    2. Visible chart patterns
-    3. Approximate support and resistance
-    4. Rally period and percentage, if readable
-    5. Unusually high trading volume
-    6. Relationship between price and volume
-    7. Risks and uncertainty
-
-    Do not invent unreadable dates or price levels.
-    Separate observations from predictions.
-    This is not investment advice.
+    Use short bullet points.
+    Do not invent values that are not visible.
     """
 
     message = HumanMessage(content=[
